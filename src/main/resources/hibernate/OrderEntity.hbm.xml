@@ -21,9 +21,5 @@
         <property name="description">
             <column name="description" sql-type="text"/>
         </property>
-        <many-to-one name="bankAccountByAccountId"
-                     class="com.epam.lab.payments.domain.BankAccountEntity">
-            <column name="account_id"/>
-        </many-to-one>
     </class>
 </hibernate-mapping>

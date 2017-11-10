@@ -2,54 +2,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<meta charset="utf-8" />
-	<meta name="description" content="Dynamic tables and grids using jqGrid plugin" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/css/ui.jqgrid.min.css">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-	<link rel="stylesheet" href="http://klever-hotel.ru/css/card.css" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/js/jquery.jqgrid.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <meta name="description" content="Dynamic tables and grids using jqGrid plugin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/css/ui.jqgrid.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="http://klever-hotel.ru/css/card.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/js/jquery.jqgrid.min.js"></script>
 </head>
 
 <body>
 <div class="container" style="padding:50px 50px;">
-	<h1>{{name}}</h1>
-	<div id="header"></div>
-	<div class="col-sm-10">
-		<table id="grid-table"></table>
-		<div id="grid-pager"></div>
-	</div>
+    <div class="col-sm-10">
+        <h1>Users</h1>
+        <table id="grid-table-users"></table>
+        <div id="grid-pager-users"></div>
+    </div>
+</div>
+<div class="container" style="padding:50px 50px;">
+    <div class="col-sm-10">
+        <h1>Cards</h1>
+        <table id="grid-table-cards"></table>
+        <div id="grid-pager-cards"></div>
+    </div>
+</div>
+<div class="container" style="padding:50px 50px;">
+    <div class="col-sm-10">
+        <h1>Accounts</h1>
+        <table id="grid-table-accounts"></table>
+        <div id="grid-pager-accounts"></div>
+    </div>
 </div>
 </body>
 
 <script type="text/javascript">
-	jQuery(function($) {
-		var grid_selector = "#grid-table";
-		var pager_selector = "#grid-pager";              
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Users
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    jQuery(function($) {
+        var grid_selector = "#grid-table-users";
+        var pager_selector = "#grid-pager-users";
+
+        jQuery(grid_selector).jqGrid({
+            url:'/api/users',
+            datatype: "json",
+            colNames:['ID', 'First Name', 'Last Name', 'E-mail', 'Password', 'Phone', 'Is Admin', 'Cards', 'Accounts'],
+            colModel:[
+                {
+                    name:'id',
+                    index:'id',
+                    width:30
+                },
+                {
+                    name:'firstName',
+                    index:'firstName',
+                    width:100
+                },                {
+                    name:'lastName',
+                    index:'lastName',
+                    width:100
+                },                {
+                    name:'email',
+                    index:'email',
+                    width:200
+                },                {
+                    name:'password',
+                    index:'password',
+                    width:100
+                },                {
+                    name:'phone',
+                    index:'phone',
+                    width:150
+                },
+                {
+                    name:'isAdmin',
+                    index:'isAdmin',
+                    width:70
+                },
+                {
+                    name:'id',
+                    index:'id',
+                    width:70,
+                    formatter:formatCardsLink
+                },
+                {
+                    name:'id',
+                    index:'id',
+                    width:80,
+                    formatter:formatAccountsLink,
+                    sortable:false
+                }
+            ],
+            loadonce: true,
+            rowNum: 5,
+            rowList:[5, 10, 20, 30],
+            pager : pager_selector,
+            altRows: true,
+            multiselect: true,
+            multiboxonly: true,
+            caption: "Full list of users:",
+            loadComplete : function() {
+                    var table = this;
+                    setTimeout(function(){
+                            updatePagerIcons(table);
+                    }, 0);
+            }
+        });
+
+        //replace icons with FontAwesome icons
+        function updatePagerIcons(table) {
+            var replacement =
+            {
+                'ui-icon-seek-first' : 'ace-icon fa fa-angle-double-left bigger-140',
+                'ui-icon-seek-prev' : 'ace-icon fa fa-angle-left bigger-140',
+                'ui-icon-seek-next' : 'ace-icon fa fa-angle-right bigger-140',
+                'ui-icon-seek-end' : 'ace-icon fa fa-angle-double-right bigger-140'
+            };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+                if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+            })
+        }
+
+        function formatCardsLink(cellValue, options, rowObject) {
+            return "<a href='/cards'>" + cellValue + " cards</a>";
+        };
+
+        function formatAccountsLink(cellValue, options, rowObject) {
+            return "<a href='/accounts'>" + cellValue + " accounts</a>";
+        };
+    });
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Cards
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    jQuery(function($) {
+		var grid_selector = "#grid-table-cards";
+		var pager_selector = "#grid-pager-cards";
 
 		jQuery(grid_selector).jqGrid({
-			url:'http://localhost:8080/api/users',
+			url:'/api/cards',
 			datatype: "json",
-			height: 450,
-			colNames:['ID', 'Cardholder Name', 'Account Id', 'Security Code'],
+			colNames:['ID', 'Cardholder Name', 'Account Id', 'Expires at', 'Security Code', 'Account'],
 			colModel:[
-                {name:'id', index:'id', width:55},
-                {name:'cardHolderName', index:'cardHolderName', width:400},
-                {name:'accountId', index:'accountId', width:300},
-                {name:'securityCode', index:'securityCode', width:95, sortable:false}
+                {
+                    name:'id',
+                    index:'id',
+                    width:30
+                },
+                {
+                    name:'cardholderName',
+                    index:'cardholderName',
+                    width:300
+                },
+                {
+                    name:'accountId',
+                    index:'accountId',
+                    width:260
+                },
+                {
+                    name:'expiration',
+                    index:'expiration',
+                    width:100
+                },
+                {
+                    name:'securityCode',
+                    index:'securityCode',
+                    width:110
+                },
+                {
+                    name:'id',
+                    index:'id',
+                    width:200,
+                    formatter:formatAccountLink,
+                    sortable:false
+                }
 			],
 			loadonce: true,
 			rowNum: 5,
 			rowList:[10, 20, 30],
 			pager : pager_selector,
-			altRows: true,                                                 
+			altRows: true,
 			multiselect: true,
 			multiboxonly: true,
-			caption: "This user is the owner of the following cards:",
+			caption: "Full list of cards:",
 			loadComplete : function() {
 					var table = this;
 					setTimeout(function(){
@@ -57,7 +204,7 @@
 					}, 0);
 			}
 		});
-		
+
 		//replace icons with FontAwesome icons
 		function updatePagerIcons(table) {
 			var replacement =
@@ -70,10 +217,103 @@
 			$('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
 				var icon = $(this);
 				var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-			   
+
 				if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
 			})
 		}
+
+        function formatAccountLink(cellValue, options, rowObject) {
+            return "<a href='/accounts'>account № " + cellValue + "</a>";
+        };
+	});
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Accounts
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	jQuery(function($) {
+		var grid_selector = "#grid-table-accounts";
+		var pager_selector = "#grid-pager-accounts";
+
+		jQuery(grid_selector).jqGrid({
+			url:'/api/bankAccounts',
+			datatype: "json",
+			colNames:['ID', 'Owner Name', 'Balance', 'isBlocked', 'Cards', 'Orders'],
+			colModel:[
+                {
+                    name:'id',
+                    index:'id',
+                    width:30
+                },
+                {
+                    name:'ownerName',
+                    index:'ownerName',
+                    width:300
+                },
+                {
+                    name:'balance',
+                    index:'balance',
+                    width:200
+                },
+                {
+                    name:'isBlocked',
+                    index:'isBlocked',
+                    width:100
+                },
+                {
+                    name:'id',
+                    index:'id',
+                    width:70,
+                    formatter:formatCardsLink
+                },
+                {
+                    name:'id',
+                    index:'id',
+                    width:70,
+                    formatter:formatOrdersLink
+                }
+			],
+			loadonce: true,
+			rowNum: 5,
+			rowList:[10, 20, 30],
+			pager : pager_selector,
+			altRows: true,
+			multiselect: true,
+			multiboxonly: true,
+			caption: "This user is the owner of the following accounts:",
+			loadComplete : function() {
+					var table = this;
+					setTimeout(function(){
+								updatePagerIcons(table);
+					}, 0);
+			}
+		});
+
+		//replace icons with FontAwesome icons
+		function updatePagerIcons(table) {
+			var replacement =
+			{
+				'ui-icon-seek-first' : 'ace-icon fa fa-angle-double-left bigger-140',
+				'ui-icon-seek-prev' : 'ace-icon fa fa-angle-left bigger-140',
+				'ui-icon-seek-next' : 'ace-icon fa fa-angle-right bigger-140',
+				'ui-icon-seek-end' : 'ace-icon fa fa-angle-double-right bigger-140'
+			};
+			$('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function(){
+				var icon = $(this);
+				var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+				if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+			})
+		}
+
+        function formatCardsLink(cellValue, options, rowObject) {
+            return "<a href='/cards'>" + cellValue + " cards</a>";
+        };
+
+        function formatOrdersLink(cellValue, options, rowObject) {
+            return "<a href='/orders'>" + cellValue + " orders</a>";
+        };
 	});
 </script>
 </html>

@@ -18,9 +18,5 @@
         <property name="securityCode">
             <column name="security_code" sql-type="integer"/>
         </property>
-        <many-to-one name="bankAccountByAccountId"
-                     class="com.epam.lab.payments.domain.BankAccountEntity">
-            <column name="account_id"/>
-        </many-to-one>
     </class>
 </hibernate-mapping>
