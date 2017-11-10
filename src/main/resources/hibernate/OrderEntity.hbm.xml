@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.epam.lab.payments.domain.OrderEntity" table="order" schema="public"
+           catalog="srv105242_pay2">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="date">
+            <column name="date" sql-type="date"/>
+        </property>
+        <property name="time">
+            <column name="time" sql-type="time"/>
+        </property>
+        <property name="value">
+            <column name="value" sql-type="integer"/>
+        </property>
+        <property name="description">
+            <column name="description" sql-type="text"/>
+        </property>
+    </class>
+</hibernate-mapping>

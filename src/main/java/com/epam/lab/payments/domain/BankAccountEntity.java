@@ -11,23 +11,84 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "bank_account")
-@Data
+@Table(name = "bank_account", schema = "public", catalog = "srv105242_pay2")
 public class BankAccountEntity {
+    private int id;
+    private String ownerName;
+    private int balance;
+    private boolean isBlocked;
+
+    public boolean getIsBlocked() {
+        return isBlocked;
+    }
+
+    public void setIsBlocked(boolean isBlocked) {
+        this.isBlocked = isBlocked;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Basic
     @Column(name = "owner_name", nullable = false, length = -1)
-    private String ownerName;
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
 
     @Basic
     @Column(name = "balance", nullable = false)
-    private int balance;
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
 
     @Basic
     @Column(name = "is_blocked", nullable = false)
-    private boolean isBlocked;
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BankAccountEntity that = (BankAccountEntity) o;
+
+        if (id != that.id) return false;
+        if (balance != that.balance) return false;
+        if (isBlocked != that.isBlocked) return false;
+        if (ownerName != null ? !ownerName.equals(that.ownerName) : that.ownerName != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (ownerName != null ? ownerName.hashCode() : 0);
+        result = 31 * result + balance;
+        result = 31 * result + (isBlocked ? 1 : 0);
+        return result;
+    }
 }
+
