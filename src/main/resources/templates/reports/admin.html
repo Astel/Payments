@@ -150,7 +150,7 @@
                     editable:true,
                     editoptions:{size:10},
                     width:11,
-                    formatter: function formatEmpty() {return '';}
+                    formatter: function() {return '';}
                 }
             ],
             loadonce: true,
@@ -167,7 +167,13 @@
                             updatePagerIcons(table);
                     }, 0);
             },
-            editurl:"api/user"
+            editurl:"api/user",
+            onclickSubmit : function(params, posdata) {
+                alert(posdata);
+                return {
+                    id: "-1",
+                };
+            }
         });
         $("#adddata").click(function(){
             jQuery(grid_selector).jqGrid('editGridRow',"new",{reloadAfterSubmit:false});
