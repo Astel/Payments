@@ -15,9 +15,9 @@ import javax.persistence.Table;
 @Data
 public class UserEntity {
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", insertable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int id = 0;
 
     @Basic
     @Column(name = "first_name", nullable = false, length = -1)

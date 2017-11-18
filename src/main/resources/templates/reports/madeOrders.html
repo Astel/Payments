@@ -61,7 +61,7 @@
 
         jQuery(grid_selector).jqGrid({
             datatype: "json",
-            colNames:['ID', 'Date', 'Time', 'Value', 'Description'],
+            colNames:['ID', [[#{date}]], [[#{time}]], [[#{value}]], [[#{description}]] ],
             colModel:[
                 {
                     name:'id',
@@ -104,7 +104,6 @@
             altRows: true,
             multiselect: true,
             multiboxonly: true,
-            caption: "The following orders were made from this account:",
             loadComplete : function() {
                     var table = this;
                     setTimeout(function(){

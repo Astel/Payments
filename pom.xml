@@ -15,9 +15,13 @@
         <junit>4.12</junit>
         <org.postgresql>42.1.4</org.postgresql>
         <org.springframework.boot>1.3.3.RELEASE</org.springframework.boot>
-        <org.apache.maven.plugins>3.5.1</org.apache.maven.plugins>
+        <maven-compiler-plugin>3.5.1</maven-compiler-plugin>
         <org.springframework.boot>1.5.8.RELEASE</org.springframework.boot>
         <net.sourceforge.nekohtml>1.9.21</net.sourceforge.nekohtml>
+        <log4j>1.2.17</log4j>
+        <org.springframework.security>4.0.0.RELEASE</org.springframework.security>
+        <maven-checkstyle-plugin>2.17</maven-checkstyle-plugin>
+
     </properties>
 
 
@@ -45,13 +49,14 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <version>4.0.0.RELEASE</version>
+            <version>${org.springframework.security}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <version>${log4j}</version>
         </dependency>
 
         <dependency>
@@ -128,7 +133,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+                <version>${maven-checkstyle-plugin}</version>
                 <configuration>
                     <configLocation>src/config/checkstyle.xml</configLocation>
                     <encoding>UTF-8</encoding>
@@ -150,10 +155,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${org.apache.maven.plugins}</version>
+                <version>${maven-compiler-plugin}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>

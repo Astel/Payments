@@ -1,5 +1,6 @@
 package com.epam.lab.payments;
 
+import com.epam.lab.payments.dao.UserRepository;
 import com.epam.lab.payments.dto.UserDTO;
 import com.epam.lab.payments.services.AuthorizationService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import static com.epam.lab.payments.Constants.PASSWORD;
 @Log4j
 public class UserValidator implements Validator {
     private final AuthorizationService authorizationService;
+    private final UserRepository userRepository;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -28,19 +30,20 @@ public class UserValidator implements Validator {
         UserDTO userDTO = (UserDTO) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, EMAIL, "NotEmpty");
-        if (userDTO.getEmail().length() < 6 || userDTO.getEmail().length() > 32) {
+        if (userDTO.getEmail().length() < 4 || userDTO.getEmail().length() > 64) {
             errors.reject(EMAIL, "Size.userForm.email");
             log.info("User email " + userDTO.getEmail() + " has incorrect length"
                     + userDTO.getEmail().length());
         }
 
-        if (authorizationService.findUserByEmail(userDTO.getEmail()) != null) {
+        if (userRepository.findByEmail(userDTO.getEmail()) != null) {
             errors.reject(EMAIL, "Duplicate.userForm.email");
-            log.info("User email " + userDTO.getEmail() + " has duplicate");
+            log.info("User email " + userDTO.getEmail() + " has duplicate by "
+                    + userRepository.findByEmail(userDTO.getEmail()));
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, PASSWORD, "NotEmpty");
-        if (userDTO.getPassword().length() < 8 || userDTO.getPassword().length() > 32) {
+        if (userDTO.getPassword().length() < 4 || userDTO.getPassword().length() > 32) {
             errors.reject(PASSWORD, "Size.userForm.password");
             log.info("User password has incorrect length");
         }

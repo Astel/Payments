@@ -76,7 +76,7 @@
 
         jQuery(grid_selector).jqGrid({
             datatype: "json",
-            colNames:['Card Number', 'Cardholder Name', 'Balance', 'Expires at', 'Security Code', 'Orders'],
+            colNames:[ [[#{cardNumber}]], [[#{сardholderName}]], [[#{balance}]], [[#{expiresAt}]], [[#{orders}]] ],
             colModel:[
                 {
                     name:'id',
@@ -98,10 +98,6 @@
                     align:'center'
                 },
                 {
-                    name:'securityCode',
-                    width:110
-                },
-                {
                     jsonmap:'account.id',
                     width:70,
                     formatter:formatOrdersLink,
@@ -120,7 +116,6 @@
             altRows: true,
             multiselect: true,
             multiboxonly: true,
-            caption: "The following cards were issued for this account:",
             loadComplete : function() {
                     var table = this;
                     setTimeout(function(){
@@ -145,7 +140,7 @@
 
         jQuery(grid_selector).jqGrid({
             datatype: "json",
-            colNames:['ID', 'Date', 'Time', 'Value', 'Description'],
+            colNames:['ID', [[#{date}]], [[#{time}]], [[#{value}]], [[#{description}]] ],
             colModel:[
                 {
                     name:'id',
@@ -188,7 +183,6 @@
             altRows: true,
             multiselect: true,
             multiboxonly: true,
-            caption: "The following orders were made by cards of this account:",
             loadComplete : function() {
                     var table = this;
                     setTimeout(function(){

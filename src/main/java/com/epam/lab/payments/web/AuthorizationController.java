@@ -23,6 +23,7 @@ import static com.epam.lab.payments.Constants.REGISTRATION;
 @Log4j
 public class AuthorizationController {
     private final AuthorizationService authorizationService;
+    private final UserValidator userValidator;
 
     @RequestMapping(value = REGISTRATION, method = RequestMethod.GET)
     public ModelAndView registration() {
@@ -35,7 +36,6 @@ public class AuthorizationController {
 
     @RequestMapping(value = REGISTRATION, method = RequestMethod.POST)
     public ModelAndView createNewUser(@Valid UserDTO user, BindingResult bindingResult) {
-        UserValidator userValidator = new UserValidator(authorizationService);
         ModelAndView modelAndView = new ModelAndView();
 
         userValidator.validate(user, bindingResult);
@@ -44,7 +44,7 @@ public class AuthorizationController {
             modelAndView.addObject("successMessage",
                     "Some fields have errors");
             modelAndView.setViewName(REGISTRATION);
-            log.info("Some fields when registering user " + user + "filled incorrectly");
+            log.info("Some errors when registering user " + bindingResult.getAllErrors());
         } else {
             authorizationService.save(user);
             modelAndView.addObject("successMessage",
@@ -53,6 +53,26 @@ public class AuthorizationController {
             modelAndView.setViewName(REGISTRATION);
             log.info("User " + user + "has been registered successfully");
         }
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public ModelAndView adminCreateUser(UserDTO userDTO, BindingResult bindingResult) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/reports/admin");
+        if ("add".equals(userDTO.getOper())) {
+            userValidator.validate(userDTO, bindingResult);
+
+            if (bindingResult.hasErrors()) {
+                modelAndView.addObject("errorMessage", bindingResult.getAllErrors());
+                log.info("Some errors when registering user " + bindingResult.getAllErrors());
+            }
+            authorizationService.save(userDTO);
+        } else if ("del".equals(userDTO.getOper())) {
+            authorizationService.delete(userDTO);
+        }
+
         return modelAndView;
     }
 

@@ -16,8 +16,6 @@ function updatePagerIcons(table) {
     })
 }
 
-
-
 // credit card number from '1313847135' to '1313 8471 3500 0000'
 function digitsOf16(value) {
     var a = "" + value;

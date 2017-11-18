@@ -76,14 +76,6 @@ class PaymentsController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ModelAndView createUser(UserDTO userDTO, HttpServletRequest request) {
-        paymentsService.createUser(userDTO);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/reports/admin");
-        return modelAndView;
-    }
-
     @GetMapping("/orders")
     public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return ResponseEntity.ok(paymentsService.findAllOrders());

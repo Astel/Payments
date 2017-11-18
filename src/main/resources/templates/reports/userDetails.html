@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="http://klever-hotel.ru/css/card.css" />
 
     <style>
-        .ui-jqdialog { background-color: #5CB85C;}
+        .ui-jqdialog {background-color: #FFFFFF;}
+        .ui-widget-content {border: 2px solid #DDD;}
      </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -92,7 +93,7 @@
 
         jQuery(grid_selector).jqGrid({
             datatype: "json",
-            colNames:['Card Number', 'Cardholder Name', 'Balance', 'Expires at', 'Security Code', 'Orders'],
+            colNames:[ [[#{cardNumber}]], [[#{сardholderName}]], [[#{balance}]], [[#{expiresAt}]], [[#{orders}]] ],
             colModel:[
                 {
                     name:'id',
@@ -110,16 +111,12 @@
                 },
                 {
                     name:'expiration',
-                    width:100,
+                    width:150,
                     align:'center'
                 },
                 {
-                    name:'securityCode',
-                    width:110
-                },
-                {
                     jsonmap:'account.id',
-                    width:70,
+                    width:100,
                     formatter:formatOrdersLink,
                     sortable:false,
                     align:'center'
@@ -136,7 +133,6 @@
             altRows: true,
             multiselect: true,
             multiboxonly: true,
-            caption: "This user is the owner of the following cards:",
             loadComplete : function() {
                     var table = this;
                     setTimeout(function(){
@@ -161,7 +157,7 @@
 
         $("#grid-table-accounts").jqGrid({
             datatype: "json",
-            colNames:['Account Number', 'Owner Name', 'Balance', 'Is Blocked', 'Cards', 'Orders'],
+            colNames:[ [[#{accountNumber}]], [[#{ownerName}]], [[#{balance}]], [[#{isBlocked}]], [[#{cards}]], [[#{orders}]] ],
             colModel:[
                    {
                        name:'id',
@@ -184,17 +180,17 @@
                        template:'booleanCheckbox',
                        formatoptions: {disabled : true},
                        align: "center",
-                       width:100
+                       width:150
                    },
                    {
                        name:'id',
-                       width:70,
+                       width:200,
                        formatter:formatCardsLink,
                        align:'center'
                    },
                    {
                        name:'id',
-                       width:70,
+                       width:100,
                        formatter:formatOrdersLink,
                        align:'center'
                    }
@@ -209,7 +205,6 @@
             rowNum: 5,
             rowList:[5, 10, 20, 30],
             pager: pager_selector,
-            caption: "Full list of accounts:",
             loadComplete : function() {
                 var table = this;
                 setTimeout(function(){
@@ -233,7 +228,7 @@
 
         jQuery(grid_selector).jqGrid({
             datatype: "json",
-            colNames:['ID', 'Date', 'Time', 'Value', 'Description'],
+            colNames:['ID', [[#{date}]], [[#{time}]], [[#{value}]], [[#{description}]] ],
             colModel:[
                 {
                     name:'id',
@@ -282,7 +277,6 @@
             altRows: true,
             multiselect: true,
             multiboxonly: true,
-            caption: "This user is the owner of the following accounts:",
             loadComplete : function() {
                     var table = this;
                     setTimeout(function(){

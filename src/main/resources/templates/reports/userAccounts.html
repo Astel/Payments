@@ -61,7 +61,7 @@
 
         jQuery(grid_selector).jqGrid({
             datatype: "json",
-            colNames:['Account Number', 'Owner Name', 'Balance', 'Is Blocked', 'Orders'],
+            colNames:[ [[#{accountNumber}]], [[#{ownerName}]], [[#{balance}]], [[#{isBlocked}]], [[#{orders}]] ],
 			colModel:[
                 {
                     name:'id',
@@ -101,7 +101,6 @@
             altRows: true,
             multiselect: true,
             multiboxonly: true,
-            caption: "This user is the owner of the following accounts:",
             loadComplete : function() {
                     var table = this;
                     setTimeout(function(){

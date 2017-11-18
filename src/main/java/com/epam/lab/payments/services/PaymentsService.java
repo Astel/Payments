@@ -25,12 +25,10 @@ import java.util.Optional;
 @Log4j
 public class PaymentsService {
     private final UserRepository userRepository;
-
     private final CreditCardRepository creditCardRepository;
-
     private final OrderRepository orderRepository;
-
     private final BankAccountRepository bankAccountRepository;
+
     private final UserMapper userMapper;
     private final CreditCardMapper cardMapper;
     private final BankAccountMapper accountMapper;
@@ -99,5 +97,9 @@ public class PaymentsService {
 
     public void createUser(UserDTO userDTO) {
         userRepository.save(userMapper.userDtoToUser(userDTO));
+    }
+
+    public void deleteUser(UserDTO userDTO) {
+        userRepository.delete(userMapper.userDtoToUser(userDTO));
     }
 }

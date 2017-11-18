@@ -9,8 +9,6 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Log4j
@@ -27,9 +25,9 @@ public class AuthorizationService {
         log.info("Save user " + userDTO);
     }
 
-    public Optional<UserDTO> findUserByEmail(String email) {
-        log.info("User by email " + email + "was successfully found");
-        return Optional.ofNullable(userMapper.userToUserDto(userRepository.findByEmail(email)));
+    public void delete(UserDTO userDTO) {
+        userRepository.delete(userMapper.userDtoToUser(userDTO));
+        log.info("Delete user " + userDTO);
     }
 
     public void update(UserDTO user) {

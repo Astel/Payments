@@ -17,6 +17,8 @@ public class UserDTO {
     private String phone;
 
     private boolean isAdmin;
+
+    private String oper;
 }
 
 
